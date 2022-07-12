@@ -23,7 +23,7 @@ refl = np.arange(0.005,.031,.001) #calculate for every 0.001 surface reflectance
 
 #note: as is this script generates ~ 500,000 combos
 
-df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','azimuth','apparent_refl','atmo_corr_refl'))
+df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','apparent_refl','atmo_corr_refl'))
 
 import os
 path_of_the_directory= '/Volumes/slangSSD/hyperspectral/radiosondes/csv/overlap' #i have a folder of radiosonde profiles. i attached an example. 
