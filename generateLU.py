@@ -18,7 +18,7 @@ with open(path2, 'r') as f:
 waves=data/1000
 wavey=np.squeeze(waves[0:140]) #using sensor specific wavelengths
 zenith=np.arange(50,100,5) #calculate for every 5˚ - will interpolate rest
-azimuth=200 #average azimuth since it didnt affect output
+a=200 #average azimuth since it didnt affect output
 refl = np.arange(0.005,.031,.001) #calculate for every 0.001 surface reflectance, will interpolate rest
 
 #note: as is this script generates ~ 500,000 combos
@@ -39,25 +39,24 @@ for ind,filename in enumerate(os.listdir(path_of_the_directory)):
         temperature=data[:,2]
         mixing_ratio=data[:,3]
     for j in wavey:
-        for a in azimuth:
-            for z in zenith:
-                for t in refl:
-                    s=SixS()
-                    base_profile=AtmosProfile.MidlatitudeWinter
-                    s.wavelength=Wavelength(j)
-                    s.atmos_profile = SixSHelpers.Radiosonde._import_from_arrays(pressure, altitude, temperature, mixing_ratio, base_profile)
-                    s.aero_profile = AeroProfile.PredefinedType(AeroProfile.Maritime)
-                    s.altitudes.set_target_sea_level()
-                    s.altitudes.set_sensor_custom_altitude(1)
-                    s.geometry = Geometry.User()
-                    s.geometry.solar_z = z
-                    s.geometry.solar_a = a
-                    s.geometry.latitude = 37.3
-                    s.geometry.longitude = -123
-                    yup=t*(math.pi/math.cos(z)) #apparent refl from surface refl
-                    s.atmos_corr = AtmosCorr.AtmosCorrBRDFFromReflectance(yup)
-                    s.run()
-                    values_to_add={'radiosonde_id':ind,'wavelength':j,'zenith':z,'azimuth':a,'apparent_refl':t,'atmo_corr_refl':s.outputs.atmos_corrected_reflectance_brdf}
-                    row_to_add = pd.Series(values_to_add, name=ind)
-                    df = df.append(row_to_add)
+        for z in zenith:
+            for t in refl:
+                s=SixS()
+                base_profile=AtmosProfile.MidlatitudeWinter
+                s.wavelength=Wavelength(j)
+                s.atmos_profile = SixSHelpers.Radiosonde._import_from_arrays(pressure, altitude, temperature, mixing_ratio, base_profile)
+                s.aero_profile = AeroProfile.PredefinedType(AeroProfile.Maritime)
+                s.altitudes.set_target_sea_level()
+                s.altitudes.set_sensor_custom_altitude(1)
+                s.geometry = Geometry.User()
+                s.geometry.solar_z = z
+                s.geometry.solar_a = a
+                s.geometry.latitude = 37.3
+                s.geometry.longitude = -123
+                yup=t*(math.pi/math.cos(z)) #apparent refl from surface refl
+                s.atmos_corr = AtmosCorr.AtmosCorrBRDFFromReflectance(yup)
+                s.run()
+                values_to_add={'radiosonde_id':ind,'wavelength':j,'zenith':z,'apparent_refl':t,'atmo_corr_refl':s.outputs.atmos_corrected_reflectance_brdf}
+                row_to_add = pd.Series(values_to_add, name=ind)
+                df = df.append(row_to_add)
 df.to_csv('py6s_ac_lookup_overlap.csv')
