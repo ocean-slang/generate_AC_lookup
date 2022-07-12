@@ -26,7 +26,7 @@ refl = np.arange(0.005,.031,.001) #calculate for every 0.001 surface reflectance
 df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','azimuth','apparent_refl','atmo_corr_refl'))
 
 import os
-path_of_the_directory= '/Volumes/slangSSD/hyperspectral/radiosondes/csv/overlap'
+path_of_the_directory= '/Volumes/slangSSD/hyperspectral/radiosondes/csv/overlap' #i have a folder of radiosonde profiles. i attached an example. 
 print("Files and directories in a specified path:")
 for ind,filename in enumerate(os.listdir(path_of_the_directory)):
     f = os.path.join(path_of_the_directory,filename)
