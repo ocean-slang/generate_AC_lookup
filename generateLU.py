@@ -20,7 +20,7 @@ wavey=np.squeeze(waves[0:140]) #using sensor specific wavelengths
 zenith=np.arange(50,105,5) #calculate for every 5˚ - will interpolate rest
 refl = np.arange(0.005,.031,.001) #calculate for every 0.001 surface reflectance, will interpolate rest
 
-#note: as is this script generates ~ 500,000 combos
+#note: calculate how many combos you are running before running script...
 
 df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','apparent_refl','atmo_corr_refl'))
 
@@ -58,10 +58,15 @@ for ind,filename in enumerate(csv_files):
                     s.geometry.latitude = 37.3
                     s.geometry.longitude = -123
                     s.atmos_corr = AtmosCorr.AtmosCorrBRDFFromReflectance(yup)
+                    #i know the following is bad form (try, except pass) but since I am seeing the output, I am OK with this step -
+                    # will skip if the combination being fed into s.run() is not valid
+                    try:
                     s.run()
                     print(s.outputs.atmos_corrected_reflectance_brdf)
                     values_to_add={'radiosonde_id':ind,'wavelength':j,'zenith':z,'apparent_refl':yup,'atmo_corr_refl':s.outputs.atmos_corrected_reflectance_brdf}
                     row_to_add = pd.Series(values_to_add, name=ind)
                     df = df.append(row_to_add)
+                    except:
+                        pass
 print(df)
 df.to_csv('py6s_ac_lookup_overlap.csv')
