@@ -6,7 +6,9 @@ Written by Sarah Lang from University of RI
 
 thank you to Mollie Passacantando (URI, https://web.uri.edu/gso/meet/mollie-m-passacantando/) for python help and Yulun Wu (https://yulunwu8.github.io/) for recommending this procedure
 
-Download Py6s: https://py6s.readthedocs.io/en/latest/introduction.html
+Download Py6s: https://py6s.readthedocs.io/en/latest/index.html
+
+documentation: https://py6s.readthedocs.io/_/downloads/en/stable/pdf/
 
 for those new to python:
 
