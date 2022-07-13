@@ -19,3 +19,6 @@ I run my code through the command line like this:
 source /Users/sarahlang/miniconda3/bin/activate py6s-env #activate your environment
 cd /Volumes/slangSSD #set cd to be where your script is located
 python3 generateLU.py #run with python
+
+
+also, please first test the code with a small # of combos before running with many combos. 
