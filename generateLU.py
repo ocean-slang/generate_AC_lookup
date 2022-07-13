@@ -26,7 +26,7 @@ df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','apparent_refl'
 
 import os
 path_of_the_directory= '/Volumes/slangSSD/hyperspectral/radiosondes/csv/overlap'
-all_files=os.listdir(path_of_the_directory)
+all_files=os.listdir(path_of_the_directory) #from: https://stackoverflow.com/a/61497079
 csv_files = list(filter(lambda f: f.endswith('.csv'), all_files))
 for ind,filename in enumerate(csv_files):
     f = os.path.join(path_of_the_directory,filename)
