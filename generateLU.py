@@ -18,15 +18,15 @@ with open(path2, 'r') as f:
 waves=data/1000
 wavey=np.squeeze(waves[0:140]) #using sensor specific wavelengths
 zenith=np.arange(50,105,5) #calculate for every 5˚ - will interpolate rest
-refl = np.arange(0.005,.031,.001) #calculate for every 0.001 surface reflectance, will interpolate rest
+refl = np.arange(0.005,0.2,.0025) #calculate for every 0.0025 surface reflectance, will interpolate rest
 
-#note: calculate how many combos you are running before running script...
+#note: as is this script generates ~ 500,000 combos
 
 df = pd.DataFrame(columns=('radiosonde_id','wavelength','zenith','apparent_refl','atmo_corr_refl'))
 
 import os
 path_of_the_directory= '/Volumes/slangSSD/hyperspectral/radiosondes/csv/overlap'
-all_files=os.listdir(path_of_the_directory) #from: https://stackoverflow.com/a/61497079
+all_files=os.listdir(path_of_the_directory)
 csv_files = list(filter(lambda f: f.endswith('.csv'), all_files))
 for ind,filename in enumerate(csv_files):
     f = os.path.join(path_of_the_directory,filename)
@@ -41,7 +41,7 @@ for ind,filename in enumerate(csv_files):
     for j in wavey:
         for z in zenith:
             for t in refl:
-                yup=t*(math.pi/math.cos(z))
+                yup=t*(math.pi/math.cos(math.radians(z)))
                 if yup<0:
                     pass
                 else:
@@ -58,14 +58,12 @@ for ind,filename in enumerate(csv_files):
                     s.geometry.latitude = 37.3
                     s.geometry.longitude = -123
                     s.atmos_corr = AtmosCorr.AtmosCorrBRDFFromReflectance(yup)
-                    #i know the following is bad form (try, except pass) but since I am seeing the output, I am OK with this step -
-                    # will skip if the combination being fed into s.run() is not valid
                     try:
-                    s.run()
-                    print(s.outputs.atmos_corrected_reflectance_brdf)
-                    values_to_add={'radiosonde_id':ind,'wavelength':j,'zenith':z,'apparent_refl':yup,'atmo_corr_refl':s.outputs.atmos_corrected_reflectance_brdf}
-                    row_to_add = pd.Series(values_to_add, name=ind)
-                    df = df.append(row_to_add)
+                        s.run()
+                        print(s.outputs.atmos_corrected_reflectance_brdf)
+                        values_to_add={'radiosonde_id':ind,'wavelength':j,'zenith':z,'apparent_refl':yup,'atmo_corr_refl':s.outputs.atmos_corrected_reflectance_brdf}
+                        row_to_add = pd.Series(values_to_add, name=ind)
+                        df = df.append(row_to_add)
                     except:
                         pass
 print(df)
