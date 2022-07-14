@@ -17,5 +17,7 @@ you need anaconda or miniconda3, create new environment for py6s. see more in th
 I run my code through the command line like this:
 
 source /Users/sarahlang/miniconda3/bin/activate py6s-env #activate your environment
+
 cd /Volumes/slangSSD #set cd to be where your script is located
+
 python3 generateLU.py #run with python
